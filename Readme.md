@@ -53,3 +53,46 @@ Note 3 : if database filled 5GB Limit it replace previous old datas from the old
 You can finde analyzer bot code as in HF_BOT directory. it is a docker base HF spaces bot that handle all things with Huggingface powerfull AI servers free cpu.
 
 TODO: the Rust code will be added in Rust-code directory soon. with a work flow that make a UI for this app to use easily in windows, Linux. Mac. android and other platforms.
+
+Terminal Output:
+the output of therminal is like this :
+-------------------------------------------------------------------------------------------------------
+Parameters :          Ping      Loss    Jitter      latency     Upload Speed        Download Speed
+Desired Values :      500 ms    50%     100 ms      1000 ms         0.2 Mbps            3 Mbps
+--------------------------------------------------------------------------------------------------------
+|---|---------------|--------|-------|-------|--------|----------|----------|
+| # |       IP      |Ping(ms)|Loss(%)|Jit(ms)|Lat(ms) | Up(Mbps) |Down(Mbps)|
+|---|---------------|--------|-------|-------|--------|----------|----------|
+|  1|172.67.219.212 |    133 |0.0    |   100 |   265  |   1.69   |   7.14   |
+|  2|104.24.48.107  |    154 |0.0    |    93 |   253  |   1.38   |   7.13   |
+|  3|172.66.44.167  |    156 |40.0   |    98 |   239  |   1.06   |   6.13   |
+|  4|164.38.155.49  |     68 |0.0    |    56 |   165  |   1.09   |   5.98   |
+|  5|104.25.0.244   |    137 |0.0    |    90 |   260  |   1.57   |   5.57   |
+|  6|198.41.199.149 |    166 |20.0   |    95 |   275  |   1.38   |   5.43   |
+|  7|45.131.7.249   |     60 |0.0    |    62 |   134  |   1.19   |   5.41   |
+|  8|104.19.96.193  |    145 |0.0    |   100 |   265  |   1.52   |   5.08   |
+|  9|104.25.232.111 |    122 |20.0   |    95 |   230  |   1.32   |   5.00   |
+| 10|104.25.24.119  |    136 |0.0    |    77 |   235  |   1.32   |   3.37   |
+|---|---------------|--------|-------|-------|--------|----------|----------|
+|   |    Average    |    127 |  8.0  |    86 |   232  |   1.35   |    5.62  |
+|---|---------------|--------|-------|-------|--------|----------|----------|
+
+IPs for useage save in Selected-IPs.txt for more detail see Selected-IPs.csv
+
+IPs:
+-------------------------------------------------------------------------------
+172.67.219.212
+104.24.48.107
+172.66.44.167
+164.38.155.49
+104.25.0.244
+198.41.199.149
+45.131.7.249
+104.19.96.193
+104.25.232.111
+104.25.24.119
+--------------------------------------------------------------------------------
+
+You Choose to be a Selfish creature that dont Help Others. to be a human kind next time choose Yes i want to participate in Clean IP collection. :(
+
+    I hope you get hit by a truck!

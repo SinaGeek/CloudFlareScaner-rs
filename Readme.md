@@ -28,6 +28,29 @@ every user can register in bot and get clean CF IPs those are categorized by fea
     - latitude
     - ip
     - time & Date of scan
+    
+for this pupose we call "https://api.ip.sb/geoip" that return ja=son like this:
+
+{
+  "continent_code": "AS",
+  "organization": "MTN Irancell",
+  "country": "Iran",
+  "isp": "MTN Irancell",
+  "country_code": "IR",
+  "asn_organization": "Iran Cell Service and Communication Company",
+  "region": "Alborz Province",
+  "asn": 44244,
+  "region_code": "30",
+  "offset": 12600,
+  "city": "Karaj",
+  "timezone": "Asia/Tehran",
+  "longitude": 51.0025,
+  "latitude": 35.8359,
+  "ip": "2.147.109.3"
+}
+
+but also ask your too abnd record both data for analyzing of how network works.
+
 and User can ask for Top 20 results by desired setting.
 The only limitation is everyone can only get 4 times more than number of Clean IP it added to data base every mounth.
 

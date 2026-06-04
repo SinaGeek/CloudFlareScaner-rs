@@ -519,7 +519,7 @@ def print_final_table(selected_ips: List[IPInfo], title: str = "selected IP(s)")
 # Main entry point
 # -------------------------------------------------------------------
 def main():
-    DEFAULT_MAX_IP = 50
+    DEFAULT_MAX_IP = 10
     DEFAULT_MAX_PING = 500
     DEFAULT_MAX_JITTER = 100
     DEFAULT_MAX_LATENCY = 1000

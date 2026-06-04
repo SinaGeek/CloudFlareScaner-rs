@@ -51,3 +51,5 @@ Note 2 : If analyzer is dead it keep reutls untile the database is filled every 
 Note 3 : if database filled 5GB Limit it replace previous old datas from the oldest to news with newer data.
 
 You can finde analyzer bot code as in HF_BOT directory. it is a docker base HF spaces bot that handle all things with Huggingface powerfull AI servers free cpu.
+
+TODO: the Rust code will be added in Rust-code directory soon. with a work flow that make a UI for this app to use easily in windows, Linux. Mac. android and other platforms.

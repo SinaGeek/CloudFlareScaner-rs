@@ -1,3 +1,15 @@
+# Scanner output and local configuration
 selected-ips*
 config.ini
+progress.json
 Progress.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Rust
+/target/
+Rust/target/

@@ -1,0 +1,10 @@
+# Python scanner runtime dependencies.
+# Keep requests and its transport/encoding dependencies in a compatible set to
+# avoid RequestsDependencyWarning on Python 3.14+ environments.
+requests>=2.32.5,<3
+urllib3>=2.2,<3
+charset-normalizer>=3.4,<4
+chardet>=5.2,<6
+aiohttp>=3.12,<4
+aiodns>=3.2,<4
+ping3>=4.0,<5

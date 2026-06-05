@@ -1,0 +1,8 @@
+[package]
+name = "pluribus-scanner"
+version = "0.1.0"
+edition = "2021"
+description = "Rust terminal UI prototype for the Pluribus Cloudflare clean IP scanner"
+license = "MIT"
+
+[dependencies]

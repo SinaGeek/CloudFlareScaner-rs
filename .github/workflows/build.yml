@@ -1,1 +1,51 @@
-TODO: Windows PluribusScanner.exe will be make of Rust file will be added here to be made by github action and added to released of github.
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python scanner checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile scanner and analyzer
+        run: |
+          python -m py_compile start-file-async.py
+          python -m py_compile HF_bot/Analyzer_bot.py
+
+  rust:
+    name: Rust UI build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Test Rust UI
+        working-directory: Rust
+        run: cargo test --locked
+      - name: Build release binary
+        working-directory: Rust
+        run: cargo build --release --locked
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pluribus-scanner-${{ matrix.os }}
+          path: |
+            Rust/target/release/pluribus-scanner
+            Rust/target/release/pluribus-scanner.exe
+          if-no-files-found: ignore

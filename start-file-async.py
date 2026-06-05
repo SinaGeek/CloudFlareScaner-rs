@@ -1,5 +1,12 @@
 import os
 import sys
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    message=r"urllib3 .* or chardet .*/charset_normalizer .* doesn\'t match a supported version!",
+)
+
 import requests
 import json
 import ipaddress
@@ -11,7 +18,8 @@ import subprocess
 import asyncio
 import aiohttp
 import socket
-from typing import List, Optional, Tuple, Dict, Set
+from dataclasses import dataclass
+from typing import List, Optional, Tuple, Dict, Set, Union
 
 print_ping_error_message = False
 openssl_is_active = False
@@ -110,6 +118,7 @@ def getDownloadSpeed(ip, size, min_speed):
     try:
         start_time = time.time()
         response = requests.get(url, headers=headers, params=params, timeout=timeout)
+        response.raise_for_status()
         download_time = time.time() - start_time
         download_speed = round(download_size / download_time * 8 / 1000000, 2)
     except requests.exceptions.RequestException:
@@ -132,6 +141,7 @@ def getUploadSpeed(ip, size, min_speed):
     try:
         start_time = time.time()
         response = requests.post(url, headers=headers, params=params, files=files, timeout=timeout)
+        response.raise_for_status()
         upload_time = time.time() - start_time
         upload_speed = round(upload_size / upload_time * 8 / 1000000, 2)
     except requests.exceptions.RequestException:
@@ -196,24 +206,24 @@ def addNewCloudflareRecord(email, api_key, zone_id, subdomain, ip):
 
 def has_openssl():
     try:
-        subprocess.check_call(["openssl", "version"], stdout=subprocess.PIPE)
+        subprocess.check_call(["openssl", "version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return True
-    except:
+    except (OSError, subprocess.CalledProcessError):
         return False
 
 
 # -------------------------------------------------------------------
 # IPInfo class with serialization
 # -------------------------------------------------------------------
+@dataclass
 class IPInfo:
-    def __init__(self, ip, ping, jitter, latency, packet_loss, upload, download):
-        self.ip = ip
-        self.ping = ping
-        self.jitter = jitter
-        self.latency = latency
-        self.packet_loss = packet_loss
-        self.upload = upload
-        self.download = download
+    ip: str
+    ping: int
+    jitter: int
+    latency: int
+    packet_loss: float
+    upload: float
+    download: float
 
     def to_dict(self):
         return {
@@ -235,11 +245,24 @@ class IPInfo:
 # -------------------------------------------------------------------
 # Random IP generator (range first, then IP)
 # -------------------------------------------------------------------
-def random_ip_generator(ranges: List[ipaddress.IPv4Network], tested_ips: Set[str], total_possible: int):
-    while len(tested_ips) < total_possible:
+def usable_host_count(net: Union[ipaddress.IPv4Network, ipaddress.IPv6Network]) -> int:
+    # Avoid materializing huge Cloudflare ranges with list(net.hosts()).
+    if net.version == 4 and net.prefixlen < 31:
+        return max(net.num_addresses - 2, 0)
+    return net.num_addresses
+
+
+def random_ip_generator(ranges: List[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]],
+                        tested_ips: Set[str], total_possible: int):
+    while len(tested_ips) < total_possible and ranges:
         net = random.choice(ranges)
-        ip_int = random.randint(int(net.network_address) + 1, int(net.broadcast_address) - 1)
-        ip = str(ipaddress.IPv4Address(ip_int))
+        if net.version == 4 and net.prefixlen < 31:
+            low = int(net.network_address) + 1
+            high = int(net.broadcast_address) - 1
+        else:
+            low = int(net.network_address)
+            high = int(net.broadcast_address)
+        ip = str(ipaddress.ip_address(random.randint(low, high)))
         if ip not in tested_ips:
             tested_ips.add(ip)
             yield ip
@@ -679,7 +702,7 @@ def main():
             filtered_ranges.append(net)
         ranges = filtered_ranges
 
-        total_possible = sum(len(list(net.hosts())) for net in ranges)
+        total_possible = sum(usable_host_count(net) for net in ranges)
         print(f"Loaded {len(ranges)} CIDR ranges after filtering, total possible IPs: {total_possible}.")
 
         if print_ping_error_message:
